@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Longitude and Latitude Finder</title>
+  <style>
+    label {
+      display: block;
+    }
+    input {
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <section>
+    <h1>Longitude and Latitude Finder</h1>
+    <label>Enter any address to find the longitude and latitude:</label>
+    <input autofocus type="text" name="address" id="address" placeholder="Enter a city or town">
+    <div id="results" class=""></div>
+  </section>
+  <script>
+  (function(){
+    const address = document.querySelector("#address");
+    const results = document.querySelector('#results');
+    
+    address.addEventListener('input', getCoordinates);
+    
+    function getCoordinates() {
+      const url = `http://nominatim.openstreetmap.org/search/${address.value}?format=json&countrycode=gb`;
+      fetch(url).then(function(response) {
+        return response.json();
+      }).then(function(j){
+        const location = j[0].display_name;
+        const lat = j[0].lat;
+        const lon = j[0].lon;
+        const html = `<p>${location} <br>lat: ${lat} <br>lng: ${lon}</p>`;
+        results.innerHTML = html;
+      }).catch(function(err){
+        console.log(err);
+      })
+    }
+
+  })()
+  </script>
+</body>
+</html>
